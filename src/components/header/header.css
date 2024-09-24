@@ -1,0 +1,28 @@
+.nav {
+  display: flex;
+  padding: 15px 40px;
+  justify-content: space-between;
+  align-items: center;
+  background-color: grey;
+}
+
+.nav-header {
+  display: flex;
+  text-align: center;
+  color: wheat;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.nav-items {
+  list-style: none;
+  display: flex;
+  color: white;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.nav-items > li {
+  padding: 5px;
+}
