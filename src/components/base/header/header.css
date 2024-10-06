@@ -13,16 +13,20 @@
   font-size: 18px;
   font-weight: 700;
   cursor: pointer;
+  text-decoration: none;
 }
 
 .nav-items {
-  list-style: none;
   display: flex;
   color: white;
-  font-size: 13px;
   cursor: pointer;
+  list-style: none;
+  gap: 5px;
 }
 
 .nav-items > li {
-  padding: 5px;
+  padding: 10px;
+  text-decoration: none;
+  color: black;
+  font-size: 18px;
 }

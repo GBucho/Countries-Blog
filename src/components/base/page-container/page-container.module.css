@@ -1,4 +1,4 @@
-.card-content {
+.root {
   display: flex;
   position: relative;
   flex-direction: column;
