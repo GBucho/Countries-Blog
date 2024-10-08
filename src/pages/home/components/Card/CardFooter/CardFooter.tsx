@@ -2,8 +2,9 @@
 import "./Cardfooter.module.css";
 // import classes from "./Cardfooter.module.css";
 
-const CardFooter: React.FC<{ population: string }> = (props) => {
-  return <h2> {props.population}</h2>;
+const CardFooter: React.FC<{ Capital: string }> = (props) => {
+  const { Capital } = props;
+  return <h2>{Capital}</h2>;
 };
 
 export default CardFooter;

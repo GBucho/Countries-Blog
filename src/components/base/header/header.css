@@ -24,7 +24,7 @@
   gap: 5px;
 }
 
-.nav-items > li {
+.nav-items > a {
   padding: 10px;
   text-decoration: none;
   color: black;

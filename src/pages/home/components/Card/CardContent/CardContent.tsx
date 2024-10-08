@@ -2,8 +2,9 @@
 import "./CardContent.module.css";
 // import classes from "./CardContent.module.css";
 
-const CardContent: React.FC<{ location: string }> = (props) => {
-  return <h2>{props.location}</h2>;
+const CardContent: React.FC<{ Population: string }> = (props) => {
+  const { Population } = props;
+  return <h2>{Population}</h2>;
 };
 
 export default CardContent;

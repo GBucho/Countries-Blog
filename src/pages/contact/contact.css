@@ -1,0 +1,11 @@
+.contact {
+  width: 500px;
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+}
+
+.wrapper {
+  display: flex;
+  justify-content: center;
+}
