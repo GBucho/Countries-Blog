@@ -1,11 +1,11 @@
 import { useParams } from "react-router-dom";
-import { country } from "../../static/dummy-data";
+import country from "../../components/Card/static/data";
 import "./single.css";
 
 const SingleArticleView = () => {
   const { id } = useParams();
 
-  const selectedCountry = country.find((article) => article.id == id);
+  const selectedCountry = country.find((mycountry) => mycountry.id == id);
 
   if (!selectedCountry) {
     return <div>Article Not Found</div>;

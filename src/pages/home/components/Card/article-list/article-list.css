@@ -1,0 +1,14 @@
+.country-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.vote-stats {
+  display: flex;
+  justify-content: center;
+}
+.vote-stats > button {
+  padding: 10px;
+  margin: 12px;
+}
