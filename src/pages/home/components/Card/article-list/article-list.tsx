@@ -1,90 +1,125 @@
-import { useState } from "react";
+import { FormEvent, useReducer } from "react";
 import Article from "../article/article";
 import CardHeader from "../CardHeader/CardHeader";
 import "./article-list.css";
 import { Link } from "react-router-dom";
 import country from "../static/data";
+import CountryCreateForm from "../country-create-form/country-create-form";
+import { countryReducer } from "./reducer/reducer";
 
 const ArticleList: React.FC = () => {
-  const [countryList, setCountryList] = useState<
-    {
-      name: string;
-      population: string;
-      capital: string;
-      id: string;
-      vote: number;
-    }[]
-  >(country);
+  const [countryList, dispatch] = useReducer(countryReducer, country);
 
   const handleUpvoteCountry = (id: string) => {
-    const updatedCountriesList = countryList.map((mycountry) => {
-      if (mycountry.id === id) {
-        return { ...mycountry, vote: mycountry.vote + 1 };
-      }
-      return { ...mycountry };
-    });
-
-    setCountryList(updatedCountriesList);
+    dispatch({ type: "upvote", payload: { id } });
   };
 
-  const handleCountryVoteSort = (type: "asc" | "dec") => {
-    const copiedCountriesList = [...countryList];
-    if (type === "asc") {
-      const sortedCountryList = copiedCountriesList.sort((a, b) => {
-        return a.vote - b.vote;
-      });
-      setCountryList(sortedCountryList);
+  const handleCountryVoteSort = (sortType: "asc" | "dec") => {
+    dispatch({ type: "sort", payload: { sortType } });
+  };
+
+  const handleCreateCountry = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const countryObject: any = {};
+    const formData = new FormData(e.currentTarget);
+    for (const [key, value] of formData) {
+      countryObject[key] = value;
     }
-    if (type === "dec") {
-      const sortedCountryList = copiedCountriesList.sort((a, b) => {
-        return b.vote - a.vote;
-      });
-      setCountryList(sortedCountryList);
-    }
+    dispatch({ type: "create", payload: { countryObject } });
+  };
+
+  const handleCountryDelete = (id: string) => {
+    dispatch({ type: "delete", payload: { id } });
+  };
+
+  const handleCountryRestore = (id: string) => {
+    dispatch({ type: "restore", payload: { id } });
   };
 
   return (
     <>
       <div className="vote-stats">
-        <button
-          onClick={() => {
-            handleCountryVoteSort("asc");
-          }}
-        >
-          ASC
-        </button>
-        <button
-          onClick={() => {
-            handleCountryVoteSort("dec");
-          }}
-        >
-          DEC
-        </button>
+        <button onClick={() => handleCountryVoteSort("asc")}>ASC</button>
+        <button onClick={() => handleCountryVoteSort("dec")}>DEC</button>
+      </div>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+        }}
+      >
+        <CountryCreateForm onCountryCreate={handleCreateCountry} />
       </div>
       <section className="country-list">
-        {countryList.map((mycountry) => {
-          return (
-            <Article key={mycountry.id}>
-              <CardHeader
-                name={`${mycountry.name}`}
-                onUpVote={() => handleUpvoteCountry(mycountry.id)}
-                voteCount={mycountry.vote}
-              ></CardHeader>
-              <div>
-                <Link
+        {[...countryList]
+          .sort((a, b) => {
+            if (a.deleted && !b.deleted) return 1;
+            if (!a.deleted && b.deleted) return -1;
+            return 0;
+          })
+          .map((mycountry) => {
+            return (
+              <Article
+                key={mycountry.id}
+                style={{
+                  opacity: mycountry.deleted ? 0.5 : 1,
+                }}
+              >
+                <CardHeader
+                  name={`${mycountry.name}`}
+                  onUpVote={() => handleUpvoteCountry(mycountry.id)}
+                  voteCount={mycountry.vote}
+                />
+                <div
                   style={{
-                    color: "blue",
-                    textDecoration: "none",
-                    fontSize: 24,
+                    display: "flex",
+                    justifyContent: "space-around",
+                    textAlign: "center",
                   }}
-                  to={`${mycountry.id}`}
                 >
-                  More info
-                </Link>
-              </div>
-            </Article>
-          );
-        })}
+                  <span>
+                    <Link
+                      style={{
+                        color: "blue",
+                        textDecoration: "none",
+                        fontSize: 24,
+                      }}
+                      to={`${mycountry.id}`}
+                    >
+                      More info
+                    </Link>
+                  </span>
+                  {!mycountry.deleted ? (
+                    <span
+                      style={{
+                        color: "red",
+                        cursor: "pointer",
+                      }}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleCountryDelete(mycountry.id);
+                      }}
+                    >
+                      Delete
+                    </span>
+                  ) : (
+                    <span
+                      style={{
+                        color: "grey",
+                        cursor: "pointer",
+                      }}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleCountryRestore(mycountry.id);
+                      }}
+                    >
+                      Restore
+                    </span>
+                  )}
+                </div>
+              </Article>
+            );
+          })}
       </section>
     </>
   );

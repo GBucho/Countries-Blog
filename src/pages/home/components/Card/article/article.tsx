@@ -1,6 +1,5 @@
 // import React, { Children } from "react";
 // import { Link } from "react-router-dom";
-import "./article.module.css";
 
 // const Article: React.FC<React.PropsWithChildren<{ id: string }>> = ({
 //   id,
@@ -12,9 +11,29 @@ import "./article.module.css";
 //     </Link>
 //   );
 // };
+import React, { CSSProperties } from "react";
 
-const Article: React.FC<React.PropsWithChildren> = ({ children }) => {
-  return <div> {children}</div>;
+interface ArticleProps {
+  children: React.ReactNode;
+  style?: CSSProperties; // Optional style prop
+}
+
+const Article: React.FC<ArticleProps> = ({ children, style }) => {
+  return (
+    <div style={style}>
+      {" "}
+      {/* Apply the style prop here */}
+      {children}
+    </div>
+  );
 };
 
 export default Article;
+
+// import "./article.module.css";
+
+// const Article: React.FC<React.PropsWithChildren> = ({ children }) => {
+//   return <div> {children}</div>;
+// };
+
+// export default Article;
