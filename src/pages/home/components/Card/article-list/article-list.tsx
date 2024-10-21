@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import country from "../static/data";
 import CountryCreateForm from "../country-create-form/country-create-form";
 import { countryReducer } from "./reducer/reducer";
+import { error } from "console";
 
 const ArticleList: React.FC = () => {
   const [countryList, dispatch] = useReducer(countryReducer, country);
@@ -24,6 +25,10 @@ const ArticleList: React.FC = () => {
     const formData = new FormData(e.currentTarget);
     for (const [key, value] of formData) {
       countryObject[key] = value;
+    }
+
+    if (countryObject.capital.length < 5) {
+      alert("double check please the Capital length");
     }
     dispatch({ type: "create", payload: { countryObject } });
   };
