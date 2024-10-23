@@ -1,11 +1,33 @@
 import { Suspense } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter,
+  Navigate,
+  Outlet,
+  Route,
+  Routes,
+  useParams,
+} from "react-router-dom";
 import DefaultLayout from "./layouts";
 import ArticlesListView from "./pages/home/view/list";
 import SingleArticleView from "./pages/home/view/single";
-import AboutView from "./pages/about/views/about";
 import NotFoundPage from "./pages/404";
 import Contact from "./pages/contact";
+import {
+  defaultLocale,
+  locales,
+} from "./pages/home/components/Card/static/data";
+import AboutView from "./pages/about/about";
+
+const LangGuard: React.FC = () => {
+  const params = useParams();
+  const lang = params.lang as string;
+
+  if (!locales.includes(lang)) {
+    return <Navigate to={`/${defaultLocale}`} />;
+  }
+
+  return <Outlet />;
+};
 
 function App() {
   return (
@@ -16,24 +38,27 @@ function App() {
 
       <BrowserRouter>
         <Routes>
-          <Route element={<DefaultLayout />}>
-            <Route path="/" element={<div> Landing </div>} />
-            <Route
-              errorElement={<div> Error </div>}
-              path="home"
-              element={
-                <Suspense fallback={<div>Loading...</div>}>
-                  <ArticlesListView />
-                </Suspense>
-              }
-            />
+          <Route path="/" element={<Navigate to="/ka/home" />} />
+          <Route path=":lang" element={<LangGuard />}>
+            <Route element={<DefaultLayout />}>
+              <Route
+                errorElement={<div> Error </div>}
+                path="home"
+                element={
+                  <Suspense fallback={<div>Loading...</div>}>
+                    <ArticlesListView />
+                  </Suspense>
+                }
+              />
 
-            <Route path="home/:id" element={<SingleArticleView />} />
+              <Route path="home/:id" element={<SingleArticleView />} />
 
-            <Route path="about" element={<AboutView />} />
-            <Route path="contact" element={<Contact />} />
+              <Route path="about" element={<AboutView />} />
+              <Route path="contact" element={<Contact />} />
+            </Route>
+
+            <Route path="*" element={<NotFoundPage />} />
           </Route>
-          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </BrowserRouter>
     </div>

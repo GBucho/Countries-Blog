@@ -2,14 +2,18 @@ import { FormEvent, useReducer } from "react";
 import Article from "../article/article";
 import CardHeader from "../CardHeader/CardHeader";
 import "./article-list.css";
-import { Link } from "react-router-dom";
-import country from "../static/data";
+import { Link, useParams } from "react-router-dom";
 import CountryCreateForm from "../country-create-form/country-create-form";
 import { countryReducer } from "./reducer/reducer";
-import { error } from "console";
+import { getTranslationContent } from "../static/language";
+import country from "../static/data";
 
 const ArticleList: React.FC = () => {
-  const [countryList, dispatch] = useReducer(countryReducer, country);
+  const params = useParams();
+  const lang = params.lang as "ka" | "en";
+  const t = getTranslationContent(lang);
+
+  const [countryList, dispatch] = useReducer(countryReducer, country[lang]);
 
   const handleUpvoteCountry = (id: string) => {
     dispatch({ type: "upvote", payload: { id } });
@@ -27,7 +31,7 @@ const ArticleList: React.FC = () => {
       countryObject[key] = value;
     }
 
-    if (countryObject.capital.length < 5) {
+    if (countryObject.capital.length < 3) {
       alert("double check please the Capital length");
     }
     dispatch({ type: "create", payload: { countryObject } });
@@ -91,7 +95,7 @@ const ArticleList: React.FC = () => {
                       }}
                       to={`${mycountry.id}`}
                     >
-                      More info
+                      {t("moreinfo")}
                     </Link>
                   </span>
                   {!mycountry.deleted ? (
