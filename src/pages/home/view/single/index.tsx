@@ -6,6 +6,9 @@ import { getTranslationContent } from "../../components/Card/static/language";
 
 const SingleArticleView = () => {
   const { id, lang } = useParams();
+  // const params = useParams();
+  // const lang = params.lang as string;
+  const itemTranslation = getTranslationContent(lang);
 
   // const countryDescription = getTranslationCountry(lang);
   const notFound = getTranslationContent(lang);
@@ -21,9 +24,17 @@ const SingleArticleView = () => {
   return (
     <Container>
       <div className="country-details">
-        <span> Name - {selectedCountry()?.name} </span>
-        <span> Population - {selectedCountry()?.population} </span>
-        <span> Capital - {selectedCountry()?.capital} </span>
+        <span>
+          {itemTranslation("name")} - {selectedCountry()?.name}
+        </span>
+        <span>
+          {" "}
+          {itemTranslation("population")} - {selectedCountry()?.population}{" "}
+        </span>
+        <span>
+          {" "}
+          {itemTranslation("capital")} - {selectedCountry()?.capital}{" "}
+        </span>
       </div>
     </Container>
   );

@@ -6,8 +6,6 @@ import { Container } from "../container/container";
 export default function Footer() {
   const params = useParams();
   const lang = params.lang as string;
-  console.log(lang);
-
   const t = getTranslationContent(lang);
 
   return (
