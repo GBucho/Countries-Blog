@@ -67,8 +67,8 @@ const countryGE = [
 ];
 
 const country = {
-  en: countryEN,
   ka: countryGE,
+  en: countryEN,
 };
 
 export default country;

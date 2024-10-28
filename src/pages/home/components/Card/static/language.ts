@@ -1,5 +1,8 @@
 const language = {
   ka: {
+    name: "სახელი",
+    population: "მოსახლეობა",
+    capital: "დედაქალაქი",
     title: "ტურისტული კომპანია",
     home: "მთავარი",
     about: "ჩვენს შესახებ",
@@ -11,8 +14,12 @@ const language = {
     create: "შექმნა",
     notfound: "გვერდი ვერ მოიძებნა",
     restore: "აღდგენა",
+    addcountry: "ქვეყნის დამატება",
   },
   en: {
+    name: "name",
+    population: "population",
+    capital: "capital",
     title: "Travel Company",
     home: "Home",
     about: "About Us",
@@ -24,6 +31,7 @@ const language = {
     create: "create",
     notfound: "page not found",
     restore: "restore",
+    addcountry: "add country",
   },
 };
 

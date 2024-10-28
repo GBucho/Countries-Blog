@@ -7,6 +7,7 @@ export const countryReducer = (
     vote: number;
     deleted: boolean;
     originalIndex: number;
+    // image: string;
   }[],
   action: any
 ) => {
