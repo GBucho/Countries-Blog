@@ -9,7 +9,8 @@ export const countryReducer = (
     originalIndex: number;
     // image: string;
   }[],
-  action: any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  action: any,
 ) => {
   if (action.type === "upvote") {
     const updatedCountriesList = countryList.map((mycountry) => {
@@ -66,18 +67,18 @@ export const countryReducer = (
     });
 
     const restoredCountry = restoredCountryList.find(
-      (country) => country.id === action.payload.id
+      (country) => country.id === action.payload.id,
     );
 
     const withoutRestoredCountry = restoredCountryList.filter(
-      (country) => country.id !== action.payload.id
+      (country) => country.id !== action.payload.id,
     );
 
     if (restoredCountry?.originalIndex !== undefined) {
       withoutRestoredCountry.splice(
         restoredCountry.originalIndex,
         0,
-        restoredCountry
+        restoredCountry,
       );
     }
 

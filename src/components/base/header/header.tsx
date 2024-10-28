@@ -5,7 +5,7 @@ import {
 } from "~/src/pages/home/components/Card/static/language";
 import "./header.css";
 import { Link, NavLink, useLocation, useParams } from "react-router-dom";
-import { getTranslationCountry } from "~/src/pages/home/components/Card/static/data";
+// import { getTranslationCountry } from "~/src/pages/home/components/Card/static/data";
 import { Container } from "../container/container";
 
 export default function header() {
