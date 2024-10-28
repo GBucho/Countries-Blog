@@ -25,6 +25,7 @@ const ArticleList: React.FC = () => {
 
   const handleCreateCountry = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const countryObject: any = {};
     const formData = new FormData(e.currentTarget);
     for (const [key, value] of formData) {
