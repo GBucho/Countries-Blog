@@ -50,6 +50,7 @@ export default function header() {
               </li>
             ))}
           </ul>
+          <NavLink to="test">OTP PAGE</NavLink>
         </nav>
       </header>
     </Container>
