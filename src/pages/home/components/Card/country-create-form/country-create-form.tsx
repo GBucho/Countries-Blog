@@ -31,7 +31,7 @@ const CountryCreateForm: React.FC<CountryCreateFormProps> = ({
   };
 
   const handleFileChange = async (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const file = event.target.files?.[0];
     if (file) {
