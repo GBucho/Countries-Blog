@@ -1,23 +1,27 @@
 import { useParams } from "react-router-dom";
-import country from "../../components/Card/static/data";
 import "./single.css";
 import { Container } from "~/src/components/base/container/container";
 import { getTranslationContent } from "../../components/Card/static/language";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { Country } from "../../components/Card/article-list/article-list";
 
 const SingleArticleView = () => {
+  const [myCountry, setMyCountry] = useState<Country | null>(null);
   const { id, lang } = useParams();
-  // const params = useParams();
-  // const lang = params.lang as string;
+
   const itemTranslation = getTranslationContent(lang);
 
-  // const countryDescription = getTranslationCountry(lang);
   const notFound = getTranslationContent(lang);
 
-  const selectedCountry = () => {
-    return country[lang as "en" | "ka"].find((mycountry) => mycountry.id == id);
-  };
+  useEffect(() => {
+    axios.get(`http://localhost:3000/countries/${id}`).then((responce) => {
+      setMyCountry(responce.data);
+      console.log(responce.data);
+    });
+  }, [id]);
 
-  if (!selectedCountry) {
+  if (!myCountry) {
     return <div> {notFound("notfound")}</div>;
   }
 
@@ -25,15 +29,15 @@ const SingleArticleView = () => {
     <Container>
       <div className="country-details">
         <span>
-          {itemTranslation("name")} - {selectedCountry()?.name}
+          {itemTranslation("name")} - {myCountry?.name}
         </span>
         <span>
           {" "}
-          {itemTranslation("population")} - {selectedCountry()?.population}{" "}
+          {itemTranslation("population")} - {myCountry?.population}{" "}
         </span>
         <span>
           {" "}
-          {itemTranslation("capital")} - {selectedCountry()?.capital}{" "}
+          {itemTranslation("capital")} - {myCountry?.capital}
         </span>
       </div>
     </Container>

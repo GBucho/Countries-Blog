@@ -31,7 +31,7 @@ const CountryCreateForm: React.FC<CountryCreateFormProps> = ({
   };
 
   const handleFileChange = async (
-    event: React.ChangeEvent<HTMLInputElement>,
+    event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -60,6 +60,7 @@ const CountryCreateForm: React.FC<CountryCreateFormProps> = ({
       onSubmit={onCountryCreate}
     >
       <input
+        name="image"
         type="file"
         accept="image/png, image/jpeg"
         onChange={handleFileChange}
