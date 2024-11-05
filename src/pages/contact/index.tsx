@@ -30,7 +30,7 @@ const Contact = () => {
       e.currentTarget.elements.firstname.value,
       e.currentTarget.elements.lastname.value,
       e.currentTarget.elements.email.value,
-      e.currentTarget.elements.usernameInput.value,
+      e.currentTarget.elements.usernameInput.value
     );
   };
 

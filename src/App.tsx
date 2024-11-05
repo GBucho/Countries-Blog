@@ -16,8 +16,8 @@ import {
   defaultLocale,
   locales,
 } from "./pages/home/components/Card/static/data";
-import AboutView from "./pages/about/about";
-import OTPPage from "./pages/OTP";
+import { AboutView } from "./pages/about/about";
+import { OTPPage } from "./pages/OTP";
 
 const LangGuard: React.FC = () => {
   const params = useParams();
@@ -54,7 +54,14 @@ function App() {
 
               <Route path="home/:id" element={<SingleArticleView />} />
 
-              <Route path="about" element={<AboutView />} />
+              <Route
+                path="about"
+                element={
+                  <>
+                    <AboutView />
+                  </>
+                }
+              />
               <Route path="contact" element={<Contact />} />
               <Route path="Test" element={<OTPPage />} />
             </Route>

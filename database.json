@@ -1,0 +1,28 @@
+{
+  "countries": [
+    {
+      "id": "1",
+      "name": "საქართველო",
+      "population": "3.4 მილიონი",
+      "capital": "თბილისი",
+      "image": "https://media.istockphoto.com/id/1774850142/photo/close-up-view-of-georgia-national-flag.jpg?s=1024x1024&w=is&k=20&c=E6lOHlw7tYS-kWEGng4ASqBZH9dlGcxyIIMm1H2j-Qc=",
+      "vote": 0
+    },
+    {
+      "id": "2",
+      "name": "საფრანგეთი",
+      "population": "66.575 მილიონი",
+      "capital": "პარიზი",
+      "image": "https://media.istockphoto.com/id/1774850142/photo/close-up-view-of-georgia-national-flag.jpg?s=1024x1024&w=is&k=20&c=E6lOHlw7tYS-kWEGng4ASqBZH9dlGcxyIIMm1H2j-Qc=",
+      "vote": 0
+    },
+    {
+      "id": "3",
+      "name": "საფრანგეთი",
+      "population": "66.575 მილიონი",
+      "capital": "პარიზი",
+      "image": "https://media.istockphoto.com/id/1774850142/photo/close-up-view-of-georgia-national-flag.jpg?s=1024x1024&w=is&k=20&c=E6lOHlw7tYS-kWEGng4ASqBZH9dlGcxyIIMm1H2j-Qc=",
+      "vote": 0
+    }
+  ]
+}

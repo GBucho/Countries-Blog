@@ -66,7 +66,7 @@ const OTPInput: React.FC<OTPInputProps> = ({ numInputs }) => {
   );
 };
 
-const OTPPage: React.FC = () => {
+export const OTPPage: React.FC = () => {
   return (
     <div>
       <h1>Enter OTP</h1>
@@ -74,5 +74,3 @@ const OTPPage: React.FC = () => {
     </div>
   );
 };
-
-export default OTPPage;
