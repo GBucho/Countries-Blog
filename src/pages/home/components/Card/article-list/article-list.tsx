@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect } from "react";
 import Article from "../article/article";
 import CardHeader from "../CardHeader/CardHeader";
 import "./article-list.css";
@@ -7,7 +7,12 @@ import CountryCreateForm from "../country-create-form/country-create-form";
 
 import { getTranslationContent } from "../static/language";
 
-import axios from "axios";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import {
+  createCountry,
+  deleteCountry,
+  getCountries,
+} from "~/src/api/countries";
 
 export interface Country {
   id: string;
@@ -22,19 +27,22 @@ const ArticleList: React.FC = () => {
   const lang = params.lang as "ka" | "en";
   const t = getTranslationContent(lang);
 
-  // const [countryList, dispatch] = useReducer(countryReducer, country[lang]);
+  const { data, refetch } = useQuery({
+    queryKey: ["Country-List"],
+    queryFn: getCountries,
+    retry: 0,
+  });
 
-  const [counryList, setCountryList] = useState<Array<Country>>([]);
+  const { mutate } = useMutation({ mutationFn: deleteCountry });
+  const createMutate = useMutation({ mutationFn: createCountry });
 
-  const getList = () => {
-    axios.get("http://localhost:3000/countries").then((res) => {
-      setCountryList(res.data);
-    });
-  };
+  // const [counryList, setCountryList] = useState<Array<Country>>([]);
 
-  useEffect(() => {
-    getList();
-  }, []);
+  // const { data, isLoading, isError } = useQuery({
+  //   queryKey: ["Country-List"],
+  //   queryFn: getCountries,
+  //   retry: 0,
+  // });
 
   // const handleUpvoteCountry = (id: string) => {
   //   dispatch({ type: "upvote", payload: { id } });
@@ -56,25 +64,17 @@ const ArticleList: React.FC = () => {
     if (countryObject.capital.length < 3) {
       alert("double check please the Capital length");
     }
-    axios.post("http://localhost:3000/countries", countryObject).then(() => {
-      console.log("created");
-      getList();
-    });
-    // dispatch({ type: "create", payload: { countryObject } });
-  };
 
-  const handleCountryDelete = (id: string) => {
-    // dispatch({ type: "delete", payload: { id } });
-    axios.delete(`http://localhost:3000/countries/${id}`).then(() => {
-      console.log("deleted?");
-      getList();
+    createMutate.mutate(countryObject, {
+      onSuccess: () => {
+        refetch();
+      },
     });
   };
 
-  // const handleCountryRestore = (id: string) => {
-  //   dispatch({ type: "restore", payload: { id } });
-  // };
-
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
   return (
     <>
       <div className="vote-stats">
@@ -90,62 +90,63 @@ const ArticleList: React.FC = () => {
         <CountryCreateForm onCountryCreate={handleCreateCountry} />
       </div>
       <section className="country-list">
-        {counryList
-          // .sort((a, b) => {
-          //   if (a.deleted && !b.deleted) return 1;
-          //   if (!a.deleted && b.deleted) return -1;
-          //   return 0;
-          // })
-          .map((mycountry) => {
-            return (
-              <Article
-                key={mycountry.id}
-                // style={{
-                //   opacity: mycountry.deleted ? 0.5 : 1,
-                // }}
+        {data?.map((mycountry: Country) => {
+          return (
+            <Article
+              key={mycountry.id}
+              // style={{
+              //   opacity: mycountry.deleted ? 0.5 : 1,
+              // }}
+            >
+              <CardHeader
+                name={`${mycountry.name}`}
+                onUpVote={() => {}}
+                // onUpVote={() => handleUpvoteCountry(mycountry.id)}
+                voteCount={mycountry.vote}
+              />
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-around",
+                  textAlign: "center",
+                }}
               >
-                <CardHeader
-                  name={`${mycountry.name}`}
-                  onUpVote={() => {}}
-                  // onUpVote={() => handleUpvoteCountry(mycountry.id)}
-                  voteCount={mycountry.vote}
-                />
-                <div
+                <span>
+                  <Link
+                    style={{
+                      color: "blue",
+                      textDecoration: "none",
+                      fontSize: 24,
+                    }}
+                    to={`${mycountry.id}`}
+                  >
+                    {t("moreinfo")}
+                  </Link>
+                </span>
+
+                <span
                   style={{
-                    display: "flex",
-                    justifyContent: "space-around",
-                    textAlign: "center",
+                    color: "red",
+                    cursor: "pointer",
+                  }}
+                  // onClick={(e) => {
+                  //   e.preventDefault();
+                  //   handleCountryDelete(mycountry.id);
+                  // }}
+                  onClick={() => {
+                    mutate(mycountry.id, {
+                      onSuccess: () => {
+                        refetch();
+                      },
+                    });
                   }}
                 >
-                  <span>
-                    <Link
-                      style={{
-                        color: "blue",
-                        textDecoration: "none",
-                        fontSize: 24,
-                      }}
-                      to={`${mycountry.id}`}
-                    >
-                      {t("moreinfo")}
-                    </Link>
-                  </span>
-
-                  <span
-                    style={{
-                      color: "red",
-                      cursor: "pointer",
-                    }}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleCountryDelete(mycountry.id);
-                    }}
-                  >
-                    Delete
-                  </span>
-                </div>
-              </Article>
-            );
-          })}
+                  Delete
+                </span>
+              </div>
+            </Article>
+          );
+        })}
       </section>
     </>
   );
