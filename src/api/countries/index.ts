@@ -24,23 +24,33 @@ export const deleteCountry = async (id: string) => {
     throw error;
   }
 };
-function getNextPageNumber(relType: string, pagination: string) {
-  const regex = new RegExp(`<[^>]*[?&]_page=(\\d+)[^>]*>; rel="${relType}"`);
-  const match = pagination.match(regex);
-  return match ? parseInt(match[1], 10) : null;
-}
 
 export const getCountries = async (
   sort: "asc" | "desc" = "asc",
   { page, limit }: { page: number; limit: number }
 ) => {
   try {
-    const res = await httpClient.get<Country[]>(
-      `/countries?_sort=likes&_order=${sort}&_page=${page}&_limit=${limit}`
+    const res = await httpClient.get<{
+      first: number;
+      prev: number;
+      next: number;
+      last: number;
+      pages: number;
+      items: number;
+      data: {
+        id: string;
+        name: string;
+        population: string;
+        capital: string;
+        image: string;
+        vote: number;
+      }[];
+    }>(
+      `/countries?_sort=likes&_order=${sort}&_page=${page}&_per_page=${limit}`
     );
     return {
-      rows: res.data,
-      nextOffset: getNextPageNumber("next", res.headers.link),
+      rows: res.data.data,
+      nextOffset: res.data.next,
     };
   } catch (error) {
     console.error(error);

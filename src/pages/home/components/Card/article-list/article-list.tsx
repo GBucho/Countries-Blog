@@ -27,15 +27,12 @@ const ArticleList: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const lang = useParams().lang as "ka" | "en";
   const t = getTranslationContent(lang);
-  const params = useParams();
   const { width } = useWindowSize();
   const sortOrder = searchParams.get("sort") || "asc";
 
   const {
-    status,
     data,
     refetch,
-    error,
     isFetching,
     isFetchingNextPage,
     fetchNextPage,
@@ -106,6 +103,7 @@ const ArticleList: React.FC = () => {
 
   const handleSort = (newSortOrder: "asc" | "desc") => {
     setSearchParams({ sort: newSortOrder });
+    refetch();
   };
 
   const handleUpvote = (id: string) => {
@@ -135,50 +133,66 @@ const ArticleList: React.FC = () => {
         <CountryCreateForm onCountryCreate={handleCreateCountry} />
       </div>
       <section className="country-list">
-        {virtualItems?.map((mycountry: Country) => {
-          <Article key={mycountry.id}>
-            <CardHeader
-              name={`${mycountry.name}`}
-              onUpVote={() => handleUpvote(mycountry.id)}
-              voteCount={mycountry.vote}
-            />
-            <div
+        {virtualItems?.map((virtualRow) => {
+          const mycountry = allRows[virtualRow.index];
+
+          if (!mycountry) return null;
+
+          return (
+            <Article
+              key={mycountry.id}
               style={{
-                display: "flex",
-                justifyContent: "space-around",
-                textAlign: "center",
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: `${virtualRow.size}px`,
+                transform: `translateY(${virtualRow.start}px)`,
               }}
             >
-              <span>
-                <Link
-                  style={{
-                    color: "blue",
-                    textDecoration: "none",
-                    fontSize: 24,
-                  }}
-                  to={`${mycountry.id}`}
-                >
-                  {t("moreinfo")}
-                </Link>
-              </span>
-
-              <span
+              <CardHeader
+                name={`${mycountry.name}`}
+                onUpVote={() => handleUpvote(mycountry.id)}
+                voteCount={mycountry.vote}
+              />
+              <div
                 style={{
-                  color: "red",
-                  cursor: "pointer",
-                }}
-                onClick={() => {
-                  mutate(mycountry.id, {
-                    onSuccess: () => {
-                      refetch();
-                    },
-                  });
+                  display: "flex",
+                  justifyContent: "space-around",
+                  textAlign: "center",
                 }}
               >
-                Delete
-              </span>
-            </div>
-          </Article>;
+                <span>
+                  <Link
+                    style={{
+                      color: "blue",
+                      textDecoration: "none",
+                      fontSize: 24,
+                    }}
+                    to={`${mycountry.id}`}
+                  >
+                    {t("moreinfo")}
+                  </Link>
+                </span>
+
+                <span
+                  style={{
+                    color: "red",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => {
+                    mutate(mycountry.id, {
+                      onSuccess: () => {
+                        refetch();
+                      },
+                    });
+                  }}
+                >
+                  Delete
+                </span>
+              </div>
+            </Article>
+          );
         })}
         <div>
           {isFetching && !isFetchingNextPage ? "Background Updating..." : null}
